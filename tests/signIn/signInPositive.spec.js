@@ -2,7 +2,7 @@ import { test } from '../_fixtures/fixtures';
 
 let user;
 
-test.beforeEach(async ({}) => {
+test.beforeEach(async ({ }) => {
   user = {
     email: 'test_new_user@gmail.com',
     password: 'newpass123!',
