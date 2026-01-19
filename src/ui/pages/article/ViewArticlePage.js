@@ -16,7 +16,7 @@ export class ViewArticlePage {
     this.bodyArticleAuthorName = this.bodyArticleDetailsLocator
       .locator('a.author').nth(0);
     this.editButtonBody = page.getByRole('button', {
-      name: ' Edit Article'
+      name: 'Edit Article'
     }).last();
     this.deleteButtonBody = page.getByRole('button', {
       name: 'Delete Article'
@@ -59,7 +59,7 @@ export class ViewArticlePage {
 
   async assertArticleTagsToContainText(tags) {
     await test.step(`Assert the article have Tags'`, async () => {
-      for (let i = 0; i < await tags.length; i++) {
+      for (let i = 0; i < tags.length; i++) {
         await expect(this.tagsRow).toContainText(tags[i]);
       }
     });
@@ -67,8 +67,8 @@ export class ViewArticlePage {
 
   async assertArticleTagsDoNotContainText(tags) {
     await test.step(`Assert the article don't have deleted Tags'`, async () => {
-      for (let i = 0; i < await tags.length; i++) {
-        await expect(this.tagsRow).not.toContainText(tags[i]);
+      for (const tag of tags) {
+        await expect(this.tagsRow).not.toContainText(tag);
       }
     });
   }

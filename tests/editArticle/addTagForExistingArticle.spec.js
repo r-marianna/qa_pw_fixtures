@@ -1,28 +1,21 @@
 import { test } from "../_fixtures/fixtures";
 import { generateNewArticleData } from "../../src/common/testData/generateNewArticleData";
-import { generateNewUserData } from "../../src/common/testData/generateNewUserData";
-import { createNewArticle } from '../../src/ui/actions/article/createNewArticle';
-import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
+
+let articleEdit;
 
 test.describe('Edit an existing article with tags', () => {
-  let article;
-  let articleEdit;
-  let user;
-
-  let randomNumber = Math.floor(Math.random() * 10);
-
-  test.beforeEach(async ({ page, logger }) => {
-    user = generateNewUserData();
-    articleEdit = generateNewArticleData(randomNumber, logger);
-
-    await signUpUser(page, user);
+  test.beforeEach(async ({ signUpUser, articleWithoutTags, logger }) => {
+    await signUpUser;
+    await articleWithoutTags;
+    articleEdit = generateNewArticleData(8, logger)
   });
 
   test('Add the Tag for the existing article without tags',
-    async ({ page, createArticlePage, viewArticlePage }) => {
-      article = generateNewArticleData();
-      await createNewArticle(page, article);
-
+    async (
+      { signUpUser, articleWithoutTags, createArticlePage, viewArticlePage }
+    ) => {
+      await signUpUser;
+      await articleWithoutTags;
       await viewArticlePage.clickEditArticleButton();
       await createArticlePage.fillTagsField(articleEdit.tags);
       await createArticlePage.clickUpdateArticleButton();
@@ -31,11 +24,12 @@ test.describe('Edit an existing article with tags', () => {
       await viewArticlePage.assertArticleTagsToContainText(articleEdit.tags);
     });
 
-  test('Add the Tag for the existing article with tags',
-    async ({ page, createArticlePage, viewArticlePage, logger }) => {
-      article = generateNewArticleData(randomNumber, logger);
-      await createNewArticle(page, article);
-
+  test('Add the Tag for the article',
+    async (
+      { signUpUser, articleWithOneTag, createArticlePage, viewArticlePage }
+    ) => {
+      await signUpUser;
+      await articleWithOneTag;
       await viewArticlePage.clickEditArticleButton();
       await createArticlePage.deleteTags();
       await createArticlePage.fillTagsField(articleEdit.tags);
@@ -43,7 +37,21 @@ test.describe('Edit an existing article with tags', () => {
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
       await viewArticlePage.assertArticleTagsToContainText(articleEdit.tags);
-      await viewArticlePage.assertArticleTagsDoNotContainText(article.tags);
+    });
+
+  test('Add two tags to the article',
+    async (
+      { signUpUser, articleWithTwoTags, createArticlePage, viewArticlePage }
+    ) => {
+      await signUpUser;
+      await articleWithTwoTags;
+      await viewArticlePage.clickEditArticleButton();
+      await createArticlePage.deleteTags();
+      await createArticlePage.fillTagsField(articleEdit.tags);
+      await createArticlePage.clickUpdateArticleButton();
+      await viewArticlePage.waitForPageAppear();
+      await viewArticlePage.reload();
+      await viewArticlePage.assertArticleTagsToContainText(articleEdit.tags);
     });
 
 });

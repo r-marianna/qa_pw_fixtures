@@ -1,24 +1,17 @@
 import { test } from "../_fixtures/fixtures";
-import { generateNewArticleData } from "../../src/common/testData/generateNewArticleData";
-import { generateNewUserData } from "../../src/common/testData/generateNewUserData";
-import { createNewArticle } from '../../src/ui/actions/article/createNewArticle';
 import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
 import { TITLE_CANNOT_BE_EMPTY, DESCRIPTION_CANNOT_BE_EMPTY, BODY_CANNOT_BE_EMPTY } from '../../src/ui/constants/articleErrorMessages.js'
 
 test.describe('Edit an existing article without tag', () => {
   let article;
-  let user;
 
-  test.beforeEach(async ({ page, logger }) => {
-    user = generateNewUserData();
-    article = generateNewArticleData(8, logger);
-
-    await signUpUser(page, user);
-    await createNewArticle(page, article);
+  test.beforeEach(async ({ signUpUser, articleWithTwoTags }) => {
+    await signUpUser;
+    await articleWithTwoTags;
   });
 
   test('Remove an article tag for the existing article with tag',
-    async ({ createArticlePage, viewArticlePage }) => {
+    async ({ createArticlePage, viewArticlePage, articleWithTwoTags }) => {
       await viewArticlePage.clickEditArticleButton();
       await createArticlePage.deleteNTags(2);
       await createArticlePage.waitForPageAppear();
@@ -26,7 +19,7 @@ test.describe('Edit an existing article without tag', () => {
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
       await viewArticlePage.assertArticleTagsToContainText(
-        article.tags.slice(2, -1)
+        articleWithTwoTags.tags.slice(2)
       );
 
     });

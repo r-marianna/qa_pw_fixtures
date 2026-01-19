@@ -1,7 +1,4 @@
 
-import { SignUpPage } from '../../src/ui/pages/auth/SignUpPage';
-import { SignInPage } from '../../src/ui/pages/auth/SignInPage';
-import { HomePage } from '../../src/ui/pages/HomePage';
 import { test as base } from '@playwright/test';
 import { CreateArticlePage } from '../../src/ui/pages/article/CreateArticlePage';
 import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
@@ -10,12 +7,12 @@ import { generateNewArticleData } from '../../src/common/testData/generateNewArt
 import { createNewArticle } from '../../src/ui/actions/article/createNewArticle';
 
 export const test = base.extend<{
-  createArticlePage: any;
-  viewArticlePage: any;
-  editArticlePage: any;
-  articleWithoutTags: any;
-  articleWithOneTag: any;
-  articleWithTwoTags: any;
+  createArticlePage;
+  viewArticlePage;
+  editArticlePage;
+  articleWithoutTags;
+  articleWithOneTag;
+  articleWithTwoTags;
 }>({
   createArticlePage: async ({ page }, use) => {
     const createArticlePage = new CreateArticlePage(page);
@@ -32,22 +29,52 @@ export const test = base.extend<{
 
     await use(editArticlePage);
   },
-  articleWithoutTags: async ({ page }, use) => {
-    const article = generateNewArticleData();
-    const articleWithoutTags = createNewArticle(page, article);
+articleWithoutTags: async (
+  { homePage, createArticlePage, viewArticlePage, logger },
+  use
+) => {
+  const article = generateNewArticleData(0, logger);
 
-    await use(articleWithoutTags);
-  },
-  articleWithOneTag: async ({ page }, use) => {
-    const article = generateNewArticleData(1);
-    const articleWithOneTag = createNewArticle(page, article);
+  await createNewArticle(
+    article,
+    homePage,
+    createArticlePage,
+    viewArticlePage
+  );
 
-    await use(articleWithOneTag);
-  },
-  articleWithTwoTags: async ({ page }, use) => {
-    const article = generateNewArticleData(2);
-    const articleWithTwoTags = createNewArticle(page, article);
+  await use(article);
+},
 
-    await use(articleWithTwoTags);
-  },
+ articleWithOneTag: async (
+  { homePage, createArticlePage, viewArticlePage, logger },
+  use
+) => {
+  const article = generateNewArticleData(1, logger);
+
+  await createNewArticle(
+    article,
+    homePage,
+    createArticlePage,
+    viewArticlePage
+  );
+
+  await use(article);
+},
+
+articleWithTwoTags: async (
+  { homePage, createArticlePage, viewArticlePage, logger },
+  use
+) => {
+  const article = generateNewArticleData(2, logger);
+
+  await createNewArticle(
+    article,
+    homePage,
+    createArticlePage,
+    viewArticlePage
+  );
+
+  await use(article);
+},
+
 });
