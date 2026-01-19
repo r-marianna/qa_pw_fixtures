@@ -22,7 +22,8 @@ export class ViewArticlePage {
       name: 'Delete Article'
     }).last();
 
-    this.tagsRow = page.getByRole('list').nth(1);
+    // this.tagsRow = page.getByRole('list').nth(1);
+    this.tagsRow = page.locator('.tag-list');
     this.commentTextarea = page.getByPlaceholder('Write a comment...');
     this.commentButton = page.getByRole('button', { name: 'Post Comment' });
   }

@@ -1,45 +1,45 @@
 import { test } from "../_fixtures/fixtures";
-import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
 
 test.describe('Edit an existing article without tag', () => {
-  let articleEdit;
 
-  test.beforeEach(async ({ signUpUser, articleWithoutTags }) => {
+  test.beforeEach(async (
+    { signUpUser, articleWithoutTags, articleWithTwoTags }) => {
     await signUpUser;
     await articleWithoutTags;
+    await articleWithTwoTags;
   });
 
   test('Edit article Title for existing article',
-    async ({ createArticlePage, viewArticlePage, articleWithoutTags }) => {
+    async ({ createArticlePage, viewArticlePage, articleWithTwoTags }) => {
       await viewArticlePage.clickEditArticleButton();
-      await createArticlePage.fillTitleField(articleWithoutTags.title);
+      await createArticlePage.fillTitleField(articleWithTwoTags.title);
       await createArticlePage.clickUpdateArticleButton();
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
       await viewArticlePage
-        .assertArticleTitleIsVisible(articleWithoutTags.title);
+        .assertArticleTitleIsVisible(articleWithTwoTags.title);
     });
 
   test('Edit the article Description for the existing article',
-    async ({ createArticlePage, viewArticlePage, articleWithoutTags }) => {
+    async ({ createArticlePage, viewArticlePage, articleWithTwoTags }) => {
       await viewArticlePage.clickEditArticleButton();
       await createArticlePage
-        .fillDescriptionField(articleWithoutTags.description);
+        .fillDescriptionField(articleWithTwoTags.description);
       await createArticlePage.clickUpdateArticleButton();
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
       await viewArticlePage.clickEditArticleButton();
       await createArticlePage
-        .assertDescriptionHasText(articleWithoutTags.description);
+        .assertDescriptionHasText(articleWithTwoTags.description);
     });
 
   test('Edit the article Text for the existing article',
-    async ({ createArticlePage, viewArticlePage, articleWithoutTags }) => {
+    async ({ createArticlePage, viewArticlePage, articleWithTwoTags }) => {
       await viewArticlePage.clickEditArticleButton();
-      await createArticlePage.fillTextField(articleWithoutTags.body);
+      await createArticlePage.fillTextField(articleWithTwoTags.body);
       await createArticlePage.clickUpdateArticleButton();
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
-      await viewArticlePage.assertArticleTextIsVisible(articleWithoutTags.body);
+      await viewArticlePage.assertArticleTextIsVisible(articleWithTwoTags.body);
     });
 });

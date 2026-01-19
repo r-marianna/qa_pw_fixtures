@@ -1,9 +1,7 @@
 import { test } from "../_fixtures/fixtures";
-import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
 import { TITLE_CANNOT_BE_EMPTY, DESCRIPTION_CANNOT_BE_EMPTY, BODY_CANNOT_BE_EMPTY } from '../../src/ui/constants/articleErrorMessages.js'
 
-test.describe('Edit an existing article without tag', () => {
-  let article;
+test.describe('Remove fields from an existing article', () => {
 
   test.beforeEach(async ({ signUpUser, articleWithTwoTags }) => {
     await signUpUser;
@@ -18,8 +16,8 @@ test.describe('Edit an existing article without tag', () => {
       await createArticlePage.clickUpdateArticleButton();
       await viewArticlePage.waitForPageAppear();
       await viewArticlePage.reload();
-      await viewArticlePage.assertArticleTagsToContainText(
-        articleWithTwoTags.tags.slice(2)
+      await viewArticlePage.assertArticleTagsDoNotContainText(
+        articleWithTwoTags.tags
       );
 
     });

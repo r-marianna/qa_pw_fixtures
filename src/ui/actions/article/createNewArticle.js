@@ -6,7 +6,7 @@ export async function createNewArticle(
   createArticlePage,
   viewArticlePage,
 ) {
-  await test.step(`Create new article without tags`, async () => {
+  await test.step(`Create new article`, async () => {
     await homePage.clickNewArticleLink();
 
     await createArticlePage.fillAndPublishNewArticle(article);

@@ -1,8 +1,7 @@
 import { test } from '../_fixtures/fixtures';
 
-test.beforeEach(async ({ signUpUser, articleWithOneTag }) => {
+test.beforeEach(async ({ signUpUser }) => {
   await signUpUser;
-  await articleWithOneTag;
 });
 
 test('Create an article with required fields', async (
